@@ -1,0 +1,55 @@
+{# Chargement dynamique du modal #}
+<div class="modal-header">
+    <p class="text-primary m-0 fw-bold">
+
+        {% if app.request.attributes.get('_route') == 'app_demandeur_index' %}
+            Ajouter un demandeur
+        {% else %}
+            Éditer demandeur # {{ demandeur.id }}
+        {% endif %}
+    </p>
+    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <div class="card-body">
+        {% if app.request.attributes.get('_route') == 'app_demandeur_index' %}
+            {{ form_start(form, {'action': path('app_demandeur_new')}) }}
+        {% else %}
+            {{ form_start(form, {'action': path('app_demandeur_edit', {'id': demandeur.id})}) }}
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <div class="mb-3"><label class="form-label" for="status"><strong>Nom</strong></label>
+                    {{ form_widget(form.nom) }}
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3"><label class="form-label" for="status"><strong>Adresse</strong></label>
+                    {{ form_widget(form.adresse) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label"
+                                         for="username"><strong>Telephone</strong></label>{{ form_widget(form.telephone) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label" for="email"><strong>Email</strong></label>{{ form_widget(form.email) }}</div>
+            </div>
+        </div>
+
+
+        <div class="text-end mb-3">
+            <button class="btn btn-sm btn-light" type="button" data-bs-dismiss="modal">Annuler</button>
+            <button class="btn btn-sm btn-success">Ajouter</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Client' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% include '_partials/_title_header.html.twig' with {
+            title: '💼 ' ~ title,
+            linkPath: path('app_client_new')
+        } %}
+
+        <table class="table my-0 table-bordered" id="dataTable">
+            <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for client in clients %}
+                <tr>
+                    <td>{{ client.id }}</td>
+                    <td>{{ client.nom }}</td>
+                    <td>{{ client.telephone }}</td>
+                    <td>{{ client.email }}</td>
+
+
+                    {% include '_partials/_table_edit_button.html.twig' with {
+                        'show_route': 'app_client_show',
+                        'edit_route': 'app_client_edit',
+                        'id_name': 'id',
+                        'id_value': client.id
+                    } %}
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Modal frame global #}
+{#    {% include 'client/_modal_new.html.twig' %}#}
+    {% include '_partials/_modal_new.html.twig' with { 'edit_route' : 'client' }%}
+    {% include '_partials/_modal_edit.html.twig' %}
+    <script>
+        function openModal(id) {
+            const url = id ? `/client/${id}/edit` : '/new';
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('modal-edit').querySelector('.modal-content').innerHTML = data;
+                    const modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+                    modal.show();
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+{% endblock %}

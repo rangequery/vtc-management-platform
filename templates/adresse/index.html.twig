@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Adresse' %}
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block body %}
+
+    <div class="container-fluid">
+        {% include '_partials/_title_header.html.twig' with {
+            title: '🎯 ' ~ title,
+            linkPath: path('app_adresse_new')
+        } %}
+
+        <table class="table my-0 table-bordered" id="dataTable">
+            <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Préfix</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Code Postal</th>
+                <th>Ville</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for adresse in adresses %}
+                <tr>
+                    <td>{{ adresse.id }}</td>
+                    <td class="text-center">{{ adresse.prefix }}</td>
+                    <td>{{ adresse.nom }}</td>
+                    <td>{{ adresse.adresse }}</td>
+                    <td>{{ adresse.codePostal }}</td>
+                    <td>{{ adresse.ville }}</td>
+
+                    {% include '_partials/_table_edit_button.html.twig' with {
+                        'show_route': 'app_adresse_show',
+                        'edit_route': 'app_adresse_edit',
+                        'id_name': 'id',
+                        'id_value': adresse.id
+                    } %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {# Modal frame global #}
+    {% include '_partials/_modal_new.html.twig' with { 'edit_route': 'adresse' } %}
+    {% include '_partials/_modal_edit.html.twig' %}
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function openModal(id) {
+            const url = id ? `/private/adresse/${id}/editModal` : '/new';
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('modal-edit').querySelector('.modal-content').innerHTML = data;
+                    const modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+                    modal.show();
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+{% endblock %}

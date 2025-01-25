@@ -1,0 +1,59 @@
+{# Chargement dynamique du modal #}
+<div class="modal-header">
+    <p class="text-primary m-0 fw-bold">
+        {% if app.request.attributes.get('_route') == 'app_adresse_index' %}
+            Ajouter adresse
+        {% else %}
+            Éditer adresse # {{ adresse.id }}
+        {% endif %}
+    </p>
+    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <div class="card-body">
+        {% if app.request.attributes.get('_route') == 'app_adresse_index' %}
+            {{ form_start(form, {'action': path('app_adresse_new')}) }}
+        {% else %}
+            {{ form_start(form, {'action': path('app_adresse_editModal', {'id': adresse.id})}) }}
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    {{ form_widget(form.prefix, {'attr': {'maxlength': 5}}) }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    {{ form_widget(form.nom) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    {{ form_widget(form.adresse) }}
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    {{ form_widget(form.codePostal) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">{{ form_widget(form.ville) }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-end mb-3">
+            <button class="btn btn-sm btn-light" type="button" data-bs-dismiss="modal">Annuler</button>
+            <button class="btn btn-sm btn-success">Ajouter</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
