@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SousTraitent{% endblock %}
+
+{% block body %}
+    <h1>SousTraitent</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ sous_traitent.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ sous_traitent.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ sous_traitent.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ sous_traitent.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ sous_traitent.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_sous_traitent_index') }}">back to list</a>
+
+    <a href="{{ path('app_sous_traitent_edit', {'id': sous_traitent.id}) }}">edit</a>
+
+    {{ include('sous_traitent/_delete_form.html.twig') }}
+{% endblock %}

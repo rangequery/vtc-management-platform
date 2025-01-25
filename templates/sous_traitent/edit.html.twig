@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SousTraitent{% endblock %}
+
+{% block body %}
+    <h1>Edit SousTraitent</h1>
+
+    {{ include('sous_traitent/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_sous_traitent_index') }}">back to list</a>
+
+    {{ include('sous_traitent/_delete_form.html.twig') }}
+{% endblock %}

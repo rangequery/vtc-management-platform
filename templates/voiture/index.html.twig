@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voiture index{% endblock %}
+
+{% block body %}
+    {% set title = '🚘 Voiture' %}                 {# Définir le titre #}
+    {% set linkPath = path('app_voiture_new') %}   {# Définir le chemin #}
+
+    {% include '_partials/_header.html.twig' with {
+        title: title,
+        linkPath: linkPath
+    } %}
+    <div class="container-fluid">
+        <table class="table my-0 table-bordered" id="dataTable">
+            <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Marque</th>
+                <th>Model</th>
+                <th>Immatriculation</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for voiture in voitures %}
+                <tr>
+                    <td>{{ voiture.id }}</td>
+                    <td>{{ voiture.marque }}</td>
+                    <td>{{ voiture.model }}</td>
+                    <td>{{ voiture.immatriculation }}</td>
+
+                    {% include '_partials/_table_edit_button.html.twig' with {
+                        'show_route': 'app_voiture_show',
+                        'edit_route': 'app_voiture_edit',
+                        'id_name': 'id',
+                        'id_value': voiture.id
+                    } %}
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

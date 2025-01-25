@@ -1,0 +1,50 @@
+{# Chargement dynamique du modal #}
+{% set route_index = 'app_type_index' %}
+{% set route_new = 'app_type_new' %}
+{% set route_edit = 'app_type_edit' %}
+
+{% if app.request.attributes.get('_route') != route_index %}
+    {% set id = type.id %}
+{% endif %}
+
+{% set titre = 'Type' %}
+
+<div class="modal-header">
+    <p class="text-primary m-0 fw-bold">
+        {% if app.request.attributes.get('_route') == route_index %}
+            Ajouter {{ titre }}
+        {% else %}
+            Éditer {{ titre }} # {{ id }}
+        {% endif %}
+    </p>
+    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <div class="card-body">
+        {% if app.request.attributes.get('_route') == route_index %}
+            {{ form_start(form, {'action': path(route_new)}) }}
+        {% else %}
+            {{ form_start(form, {'action': path(route_edit, {'id': id})}) }}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label"
+                                         for="nom"><strong>Nom</strong></label>{{ form_widget(form.nom) }}
+                </div>
+            </div>
+
+        </div>
+        <div class="text-end mb-3">
+            <button class="btn btn-sm btn-light" type="button" data-bs-dismiss="modal">Annuler</button>
+            <button class="btn btn-sm btn-success">
+                {% if app.request.attributes.get('_route') == route_index %}
+                    Ajouter
+                {% else %}
+                    Modifier
+                {% endif %}
+            </button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
