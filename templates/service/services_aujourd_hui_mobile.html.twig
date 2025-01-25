@@ -1,0 +1,213 @@
+<div class="container d-block d-lg-none">
+    <strong>Services en cours aujourd'hui</strong>
+    {# Section pour les services non terminés aujourd'hui #}
+    {% set rowCount = 0 %}
+    {% for service in services %}
+        {% if service.serviceAt|date('Y-m-d') == "now"|date('Y-m-d') and service.status.id != 4 %}
+            {% set rowCount = rowCount + 1 %}
+            {# Condition pour alterner les couleurs de fond avec des styles inline #}
+{#            <div class="row align-items-center mb-1 border p-2"#}
+{#                 style="background-color: {% if loop.index is even %}#FFF{% else %}#ccdff8{% endif %};">#}
+                {# Première ligne d'infos #}
+            <div class="row align-items-center mb-1 border p-2"
+                 style="background-color: {% if rowCount is even %}#FFF{% else %}#ccdff8{% endif %};">
+                <div class="col-6">
+                    <strong>ID:</strong> {{ service.id ?? ''}}<br>
+                    <strong>Status:</strong> {{ service.status.nom ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Type:</strong> {{ service.type.nom ?? 'N/A' }}<br>
+                    <strong>Vol:</strong> {{ service.referenceNumber ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>From:</strong> {{ service.pickUpFrom.nom ?? 'N/A' }}<br>
+                    <strong>To:</strong> {{ service.pickUpTo.nom ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Date:</strong> {{ service.serviceAt ? service.serviceAt|date('d-m-Y') : '' }}<br>
+                    <strong>Heure:</strong> {{ service.serviceAt ? service.serviceAt|date('H:i') : '' }}
+                </div>
+
+                {# Saut de ligne pour passer à la deuxième ligne d'infos #}
+                <div class="w-100"></div>
+
+                {# Deuxième ligne d'infos #}
+                <div class="col-6">
+                    <strong>Pax:</strong> {{ service.pax ?? 'N/A' }}<br>
+                    <strong>Bagages:</strong> {{ service.bagages ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Montant HT:</strong> {{ service.montantHt ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    {% if service.chauffeur is empty %}
+                        <strong>Sous-Traitant:</strong> {{ service.sousTraitent.nom ?? 'ST N/A' }}
+                    {% else %}
+                        <strong>Chauffeur:</strong> {{ service.chauffeur.nom ?? 'C N/A' }}
+                    {% endif %}
+                </div>
+
+                <div class="col-6 d-flex justify-content-end">
+                    {% if service.chauffeur is empty %}
+                        {% if service.sousTraitent is defined and service.sousTraitent is empty %}
+                            <button class="btn btn-sm btn-success confirm-action-btn" disabled
+                                    data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                    data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if service.chauffeur is defined and service.chauffeur is empty %}
+                            <button class="btn btn-sm btn-success confirm-action-btn" disabled
+                                    data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                    data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                    {# Icônes #}
+                    &nbsp;<a href="{{ path('app_service_show', { 'id': service.id }) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
+                    &nbsp;<a href="#" onclick="openModal({{ service.id }})" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <hr style="border: 0; height: 3px; background-color: rebeccapurple; margin: 20px 0;">
+    <strong>Services terminés aujourd'hui</strong>
+    {% for service in services %}
+        {% if service.serviceAt|date('Y-m-d') == "now"|date('Y-m-d') and service.status.id == 4 %}
+            {# Condition pour alterner les couleurs de fond avec des styles inline #}
+            <div class="row align-items-center mb-1 border p-2"
+                 style="background-color: #dde3ea;">
+                {# Première ligne d'infos #}
+                <div class="col-6">
+                    <strong>ID:</strong> {{ service.id ?? ''}}<br>
+                    <strong>Status:</strong> {{ service.status.nom ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Type:</strong> {{ service.type.nom ?? 'N/A' }}<br>
+                    <strong>Vol:</strong> {{ service.referenceNumber ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>From:</strong> {{ service.pickUpFrom.nom ?? 'N/A' }}<br>
+                    <strong>To:</strong> {{ service.pickUpTo.nom ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Date:</strong> {{ service.serviceAt ? service.serviceAt|date('d-m-Y') : '' }}<br>
+                    <strong>Heure:</strong> {{ service.serviceAt ? service.serviceAt|date('H:i') : '' }}
+                </div>
+
+                {# Saut de ligne pour passer à la deuxième ligne d'infos #}
+                <div class="w-100"></div>
+
+                {# Deuxième ligne d'infos #}
+                <div class="col-6">
+                    <strong>Pax:</strong> {{ service.pax ?? 'N/A' }}<br>
+                    <strong>Bagages:</strong> {{ service.bagages ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    <strong>Montant HT:</strong> {{ service.montantHt ?? 'N/A' }}
+                </div>
+
+                <div class="col-6">
+                    {% if service.chauffeur is empty %}
+                        <strong>Sous-Traitant:</strong> {{ service.sousTraitent.nom ?? 'ST N/A' }}
+                    {% else %}
+                        <strong>Chauffeur:</strong> {{ service.chauffeur.nom ?? 'C N/A' }}
+                    {% endif %}
+                </div>
+
+                <div class="col-6 d-flex justify-content-end">
+                    {% if service.chauffeur is empty %}
+                        {% if service.sousTraitent is defined and service.sousTraitent is empty %}
+                            <button class="btn btn-sm btn-success confirm-action-btn" disabled
+                                    data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                    data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if service.chauffeur is defined and service.chauffeur is empty %}
+                            <button class="btn btn-sm btn-success confirm-action-btn" disabled
+                                    data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                    data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                    {# Icônes #}
+                    &nbsp;<a href="{{ path('app_service_show', { 'id': service.id }) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
+                    &nbsp;<a href="#" onclick="openModal({{ service.id }})" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</div>

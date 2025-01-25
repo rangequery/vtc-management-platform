@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service{% endblock %}
+{# {% set pageTitle = 'Service' %} #}
+{% block body %}
+
+    <div class="container-fluid">
+{#        {% include '_partials/_title_header.html.twig' with {#}
+{#            title: 'Archives',#}
+{#            linkPath: path('app_service_new')#}
+{#        } %}#}
+    </div>
+    <style>
+
+        /* Style personnalisé pour donner des bordures aux "cellules" comme dans un tableau */
+        .bordered-row {
+            border: 1px solid #dee2e6; /* Bordure pour la ligne */
+        }
+
+        .bordered-col {
+            border: 1px solid #dee2e6; /* Bordure pour chaque colonne */
+            padding: 8px; /* Ajoute un peu de padding pour l'espacement */
+        }
+
+        /* Taille fixe pour les boutons */
+        .fixed-size-btn {
+            width: 100px; /* Largeur fixe */
+            height: 40px; /* Hauteur fixe */
+            text-align: center; /* Centrer le texte */
+            padding: 0; /* Évite que le padding interne ne modifie la taille du bouton */
+            white-space: nowrap; /* Évite que le texte se découpe sur plusieurs lignes */
+        }
+    </style>
+
+    {# Mobile #}
+{#    {% include 'service/services_aujourd_hui_mobile.html.twig' %}#}
+{#    {% include 'service/services_avenir_mobile.html.twig' %}#}
+    {#    {% include 'service/services_a_venir_excluant_ceux_d_aujourd_hui.html.twig' %} #}
+    {#    {% include 'service/services_passes.html.twig' %} #}
+    {# Desktop #}
+    <div class="container-fluid d-none d-lg-table">
+        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+            <strong>Services from API</strong>
+            {% include 'service/services_api.html.twig' %}
+        </div>
+    </div>
+    {% include 'service/_modal_new.html.twig' %}
+    {% include '_partials/_modal_edit.html.twig' %}
+    <script>
+
+        function confirmDelete() {
+            return confirm("Êtes-vous sûr de vouloir supprimer cet élément ?");
+        }
+
+        function openModal(id) {
+            const url = id ? `/private/service/${id}/editModal` : '/new';
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('modal-edit').querySelector('.modal-content').innerHTML = data;
+                    const modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+                    modal.show();
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectField = document.getElementById('{{ form.status.vars.id }}');
+            if (selectField) {
+                selectField.value = 1;  // La valeur que tu veux sélectionner
+                selectField.disabled = true;  // Désactive le champ select
+            }
+        });
+
+        // On attache un écouteur d'événements au conteneur parent de la table
+        document.addEventListener('click', function (event) {
+            // On vérifie si l'élément cliqué est un bouton avec la classe 'confirm-action-btn'
+            if (event.target.classList.contains('confirm-action-btn')) {
+                // Prévenir le comportement par défaut
+                event.preventDefault();
+
+                // Récupérer le message de confirmation à partir de l'attribut data-message
+                const confirmationMessage = event.target.getAttribute('data-message');
+
+                // Confirmation de l'utilisateur avec le message de l'attribut
+                if (confirm(confirmationMessage)) {
+                    const url = event.target.getAttribute('data-url'); // Récupérer l'URL du bouton cliqué
+
+                    // Effectuer la requête GET en AJAX avec fetch()
+                    fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Si la requête réussit, rafraîchir la page
+                                window.location.reload();
+                            } else {
+                                // Gérer les erreurs HTTP (par exemple, 404, 500)
+                                alert('Une erreur s\'est produite lors de l\'envoi. Veuillez réessayer plus tard.');
+                            }
+                        })
+                        .catch(error => {
+                            // Gérer les erreurs réseau et les logs pour comprendre le crash
+                            console.error('Erreur réseau :', error);
+                            alert('Une erreur de connexion est survenue. Vérifiez votre connexion Internet et réessayez.');
+                        });
+                }
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+<td class="text-center">
+{#<a href="{{ path(show_route, { (id_name): id_value }) }}" style="text-decoration: none;">#}
+{#    🗂️#}
+{#</a>#}
+{#<a href="{{ path(edit_route, { (id_name): id_value }) }}" style="text-decoration: none;">#}
+{#    📝#}
+{#</a>#}
+
+{#    <a href="{{ path(show_route, { (id_name): id_value }) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>#}
+{#    <a href="{{ path(edit_route, { (id_name): id_value }) }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>#}
+
+    <a href="{{ path(show_route, { (id_name): id_value }) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
+    <a href="#" onclick="openModal({{ id_value }})" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>
+
+{#    <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>#}
+</td>

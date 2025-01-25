@@ -1,0 +1,59 @@
+<nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark">
+    <div class="container-fluid d-flex flex-column p-0">
+        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+            <div class="sidebar-brand-icon">
+                <img class="border rounded-circle img-profile" width="40" height="40"
+                     src="{{ asset('assets/img/pt-logo-simple.svg') }}" alt="">
+            </div>
+            <div class="sidebar-brand-text mx-3">
+            </div>
+        </a>
+        <hr class="sidebar-divider my-0"/>
+        <ul id="accordionSidebar" class="navbar-nav text-light">
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_service_index') }}">🏃‍<span>&nbsp;Service</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_adresse_index') }}">🎯<span>&nbsp;Adresse</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ path('app_demandeur_index') }}">💼<span>&nbsp;Demandeur</span></a></li>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ path('app_chauffeur_index') }}">👨‍💼‍<span>&nbsp;Chauffeur</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_sous_traitent_index') }}">👤<span>&nbsp;Sous Traitent</span></a>
+            </li>
+
+            <hr class="sidebar-divider my-0 bg-white"/>
+            <li class="nav-item"><a class="nav-link"
+                                    href="{{ path('app_status_index') }}">💬&nbsp;<span>Status</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_type_index') }}">🔖<span>&nbsp;Type</span></a>
+            </li>
+
+            <hr class="sidebar-divider my-0 bg-white"/>
+
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_voiture_index') }}">🚘<span>&nbsp;Voiture</span></a>
+            </li>
+            <hr class="sidebar-divider my-0 bg-white"/>
+
+            {% if app.user and is_granted('ROLE_USER') %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_service_apiIndex') }}">⚙️<span>&nbsp;From Api</span></a>
+                </li>
+            {% endif %}
+            {#            <li class="nav-item"><a class="nav-link" href="{{ path('app_type_index') }}">🔖<span> Type</span></a></li> #}
+            {#            {% if 'ROLE_ADMIN' in app.user.roles %} #}
+            {#                <li class="nav-item"><a class="nav-link" href="{{ path('app_sous_traitent_index') }}"><i #}
+            {#                                class="fas fa-user"></i><span> Sous-traitent</span></a></li> #}
+            {#                <li class="nav-item"><a class="nav-link" href="{{ path('app_forme_juridique_index') }}"><i #}
+            {#                                class="fas fa-user"></i><span>Forme juridique</span></a></li> #}
+            {#                <li class="nav-item"><a class="nav-link" href="{{ path('app_document_type_index') }}"><i #}
+            {#                                class="fas fa-user"></i><span>Document Type</span></a></li> #}
+            {#                <hr> #}
+
+
+            {#                <li class="nav-item"><a class="nav-link" href="{{ path('app_user_index') }}"> #}
+            {#                        <i class="fas fa-user"></i><span>Utilisateurs</span></a></li> #}
+            {#            {% endif %} #}
+        </ul>
+        <div class="text-center d-none d-md-inline">
+            <button id="sidebarToggle" class="btn rounded-circle border-0" type="button"></button>
+        </div>
+    </div>
+</nav>

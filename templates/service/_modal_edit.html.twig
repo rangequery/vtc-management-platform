@@ -1,0 +1,153 @@
+{# Chargement dynamique du modal #}
+{% set route_index = 'app_service_index' %}
+{% set route_new = 'app_service_new' %}
+{% set route_edit = 'app_service_editModal' %}
+
+{% set titreEdit = 'Service' %}
+{# {% if app.request.attributes.get('_route') != route_index %} #}
+{#    {% set id = sous_traitent.id %} #}
+{# {% endif %} #}
+
+
+<div class="modal-header">
+    <p class="text-primary m-0 fw-bold">
+        {% if app.request.attributes.get('_route') == 'app_service_index'
+            or app.request.attributes.get('_route') == 'app_service_chauffeur'
+            or app.request.attributes.get('_route') == 'app_service_passee'
+            or app.request.attributes.get('_route') == 'app_service_apiIndex'
+        %}
+            Ajouter service
+        {% else %}
+            Éditer le service # {{ service.id }}
+        {% endif %}
+    </p>
+    <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <div class="card-body">
+        {% if app.request.attributes.get('_route') == 'app_service_index'
+            or app.request.attributes.get('_route') == 'app_service_chauffeur'
+            or app.request.attributes.get('_route') == 'app_service_passee'
+            or app.request.attributes.get('_route') == 'app_service_apiIndex' %}
+            {{ form_start(form, {'action': path('app_service_new')}) }}
+        {% else %}
+            {{ form_start(form, {'action': path('app_service_editModal', {'id': service.id})}) }}
+        {% endif %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label" for="client"><strong>Type</strong></label>
+                    {{ form_widget(form.status) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label" for="client"><strong>Demandeur</strong></label>
+                    {{ form_widget(form.demandeur) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label" for="email"><strong>Pick up
+                            time</strong></label>{{ form_widget(form.serviceAt) }}</div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label"
+                                         for="username"><strong>Type</strong></label>{{ form_widget(form.type) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label"
+                                         for="first_name"><strong>From</strong></label>{{ form_widget(form.pickUpFrom) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3"><label class="form-label"
+                                         for="last_name"><strong>To</strong></label>{{ form_widget(form.pickUpTo) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3"><label class="form-label"
+                                         for="pax"><strong>PAX</strong></label>{{ form_widget(form.pax) }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3"><label class="form-label"
+                                         for="last_name"><strong>Bagages</strong></label>{{ form_widget(form.bagages) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3"><label class="form-label" for="status"><strong>N° Booking</strong></label>
+                    {{ form_widget(form.referenceNumber) }}
+                </div>
+            </div>
+        </div>
+        <div class="mb-3"><label class="form-label" for="Information"><strong>Détail client </strong><br></label>
+            {{ form_widget(form.infoClient) }}
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label" for="montantHt"><strong>Montant HT</strong></label>
+                    {{ form_widget(form.montantHt, { 'id': 'montantHt' }) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center">
+                <div class="mb-3">
+                    <label class="form-label me-2" for="tarif"><strong>Tarif</strong></label>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(60)">60</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(60)">65</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(90)">90</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(75)">75</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(100)">100</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(150)">150</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(150)">200</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="setMontant(150)">260</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label" for="chauffeur"><strong>Chauffeur</strong></label>
+                    {{ form_widget(form.chauffeur, { 'attr': {'id': 'chauffeur'} }) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label class="form-label" for="sous_traitent"><strong>Sous traitent</strong></label>
+                    {{ form_widget(form.sousTraitent, { 'attr': {'id': 'sous_traitent'} }) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3"><label class="form-label" for="Information"><strong>Information
+                    complementaires </strong><br></label>
+            {{ form_widget(form.informationComplementaire) }}
+        </div>
+
+        <div class="text-end mb-3">
+            <button class="btn btn-sm btn-light" type="button" data-bs-dismiss="modal">Annuler</button>
+            <button class="btn btn-sm btn-success">
+                {% if app.request.attributes.get('_route') == 'app_service_index' %}
+                    Ajouter
+                {% else %}
+                    Modifier
+                {% endif %}
+            </button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

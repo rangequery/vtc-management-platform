@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pickup transports - planning du {{ dateService|date('d F Y', 'Europe/Paris')|capitalize }}</title>
+    <style>
+        /* Styles de base pour la mise en page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Centrer la table */
+        .table-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Styles de la table */
+        table {
+            /*width: 60%;*/
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 5px;
+            border: 1px solid #000;
+        }
+        .tdCenter{
+            text-align: center;
+        }
+        th {
+            font-size: 13px;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        .tdSmall{
+            font-size: 10px;
+        }
+        .tdSmall2{
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<h3>{{ dateService|date('d F Y', 'Europe/Paris')|capitalize }}</h3>
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Chauffeur</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Booking</th>
+            <th>PAX</th>
+            <th>Montant</th>
+            <th>Transfert</th>
+            <th>Demandeur</th>
+            <th>Client</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for service in services %}
+
+            <tr>
+                <td class="tdCenter">
+                    {{ service.id }}
+                </td>
+                <td class="tdCenter">
+                    {{ service.chauffeur.nom ?? 'N/A' }}
+
+                </td>
+                <td class="tdCenter">{{ service.serviceAt ? service.serviceAt|date('H:i') : '' }}</td>
+                <td class="tdCenter">{{ service.type.nom ? service.type.nom|slice(2) : 'N/A' }}</td>
+                <td class="tdCenter">
+
+                    {{ service.referenceNumber ?? '' }}
+                </td>
+                <td class="tdCenter">{{ service.pax ?? '' }}</td>
+                <td class="tdCenter">
+                    {{ service.montantHt ? service.montantHt ~ ' €' : '' }}
+                </td>
+                <td class="tdSmall2">
+                    {{ service.pickUpFrom.nom  ?? '' }} ><br/>
+                    {{ service.pickUpTo.nom   ?? '' }}
+                </td>
+                <td class="tdSmall2">
+                    {{ service.demandeur.nom ?? '' }}
+                </td>
+                <td class="tdSmall">{{ service.infoClient is not null ? service.infoClient|nl2br : '' }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

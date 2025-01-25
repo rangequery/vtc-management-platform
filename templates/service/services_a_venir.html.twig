@@ -1,0 +1,79 @@
+{# <strong class="d-none d-lg-table">Services à venir</strong> #}
+<style>
+    #futureServicesTable .table-dark th {
+        border: none; /* Supprime les bordures de toutes les cellules <th> dans les lignes avec la classe .table-dark */
+    }
+</style>
+{% set currentDate = null %}
+{% set today = "now"|date('Y-m-d') %}
+{% set isFirstService = true %}
+
+{% for service in services|sort((a, b) => a.serviceAt|date('Y-m-d') <=> b.serviceAt|date('Y-m-d')) %}
+    {% if service.status.id in [1, 2] and service.serviceAt|date('Y-m-d') > today %}
+
+        {# Si c'est une nouvelle date, fermer la table précédente et en créer une nouvelle #}
+        {% if currentDate != service.serviceAt|date('Y-m-d') %}
+            {% if not isFirstService %}
+                </table>
+            {% endif %}
+
+            {% set currentDate = service.serviceAt|date('Y-m-d') %}
+            {% set isFirstService = false %}
+
+
+<table class="mt-4 table my-0 table-bordered table-striped table-responsive d-none d-lg-table rounded-2 overflow-hidden table-sm"
+       id="futureServicesTable">
+    <thead>
+    <tr class="table-dark no-border">
+        <th colspan="13" class="text-start">
+            {{ service.serviceAt|date('d F Y', 'Europe/Paris')|capitalize }}
+        </th>
+        <th class="text-end">
+            <a href="{{ path('app_service_planning', {'id': service.id}) }}" class="btn btn-sm btn-danger"><i class="far fa-file-pdf"></i></a>
+        </th>
+    </tr>
+    {% include 'service/_table_thead.html.twig' %}
+    </thead>
+    <tbody>
+    {% endif %}
+
+    <tr class="table-bordered">
+        {% include 'service/_table_td.html.twig' %}
+        <td class="text-center">
+            {% if service.chauffeur is not defined or service.chauffeur is empty %}
+                <button class="btn btn-sm btn-warning confirm-action-btn" disabled>
+                    Envoyer
+                </button>
+            {% else %}
+                {% if service.status.id == 1 %}
+                    <button class="btn btn-sm btn-success confirm-action-btn"
+                            data-url="{{ path('app_service_envoi', {'idService': service.id}) }}"
+                            data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                        Envoyer
+                    </button>
+                {% else %}
+                    <button class="btn btn-sm btn-danger confirm-action-btn"
+                            data-url="{{ path('app_home_annuler', {'service_id': service.id}) }}"
+                            data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                        Annuler
+                    </button>
+                {% endif %}
+            {% endif %}
+        </td>
+        {% include 'service/_table_edit_button.html.twig' with {
+            'show_route': 'app_service_show',
+            'edit_route': 'app_service_edit',
+            'del_route': 'app_service_remove',
+            'id_name': 'id',
+            'id_value': service.id
+        } %}
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# Fermer la dernière table si des services ont été affichés #}
+    {% if not isFirstService %}
+    </tbody>
+</table>
+
+{% endif %}

@@ -1,0 +1,11 @@
+<td class="text-center">
+    <a href="{{ path(show_route, { (id_name): id_value }) }}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
+    <a href="#" onclick="openModal({{ id_value }})" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a>
+        {% if app.user and is_granted('ROLE_USER') %}
+            <a href="{{ path(del_route, { (id_name): id_value, 'route': app.request.attributes.get('_route') }) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirmDelete()">
+                <i class="far fa-trash-alt"></i>
+            </a>
+        {% endif %}
+</td>

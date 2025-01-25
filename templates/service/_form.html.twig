@@ -1,0 +1,101 @@
+
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 fw-bold">
+                            {% if app.request.attributes.get('_route') == 'app_service_new' %}
+                                Ajouter service
+                            {% else %}
+                                Editer service
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="status"><strong>Status</strong></label>
+                                        {{ form_widget(form.status) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="username"><strong>Type</strong></label>{{ form_widget(form.type) }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label" for="email"><strong>Pick up
+                                            time</strong></label>{{ form_widget(form.serviceAt) }}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="first_name"><strong>From</strong></label>{{ form_widget(form.pickUpFrom) }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="last_name"><strong>To</strong></label>{{ form_widget(form.pickUpTo) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="status"><strong>N° Booking</strong></label>
+                                    {{ form_widget(form.referenceNumber) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="pax"><strong>PAX</strong></label>{{ form_widget(form.pax) }}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="last_name"><strong>Bagages</strong></label>{{ form_widget(form.bagages) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="client"><strong>Client</strong></label>{{ form_widget(form.client) }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3"><label class="form-label"
+                                                         for="first_name"><strong>Montant HT</strong></label>{{ form_widget(form.montantHt) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="chauffeur"><strong>Chauffeur</strong></label>
+                                    {{ form_widget(form.chauffeur, { 'attr': {'id': 'chauffeur'} }) }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="sous_traitent"><strong>Sous traitent</strong></label>
+                                    {{ form_widget(form.sousTraitent, { 'attr': {'id': 'sous_traitent'} }) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3"><label class="form-label" for="Information"><strong>Information complementaires</strong><br></label>
+                            {{ form_widget(form.informationComplementaire) }}
+                        </div>
+                        <div class="text-end mb-3">
+                            <button class="{{ btn_class }}">{{ button_label }}</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+
+
+

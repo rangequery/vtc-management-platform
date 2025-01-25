@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Service' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+{% if app.request.attributes.get('_route') == 'app_service_index' %}
+    {% set title =  '🏃‍ ' ~ title %}
+{% else %}
+    {% set title = chauffeur.nom ~ ' ' ~ chauffeur.prenom %}
+{% endif %}
+
+<div class="container-fluid">
+    {% include '_partials/_title_header.html.twig' with {
+    title: title,
+    linkPath: path('app_service_new')
+    } %}
+</div>
+    <style>
+
+        /* Style personnalisé pour donner des bordures aux "cellules" comme dans un tableau */
+        .bordered-row {
+            border: 1px solid #dee2e6; /* Bordure pour la ligne */
+        }
+
+        .bordered-col {
+            border: 1px solid #dee2e6; /* Bordure pour chaque colonne */
+            padding: 8px; /* Ajoute un peu de padding pour l'espacement */
+        }
+
+        /* Taille fixe pour les boutons */
+        .fixed-size-btn {
+            width: 100px; /* Largeur fixe */
+            height: 40px; /* Hauteur fixe */
+            text-align: center; /* Centrer le texte */
+            padding: 0; /* Évite que le padding interne ne modifie la taille du bouton */
+            white-space: nowrap; /* Évite que le texte se découpe sur plusieurs lignes */
+        }
+        .bordered-outer {
+            border-collapse: unset;
+            border: 1px solid #dee2e6; /* Bordure extérieure */
+        }
+
+        .bordered-outer th,
+        .bordered-outer td {
+            border: none; /* Suppression des bordures internes */
+        }
+        /* off le défilement lors du open modal*/
+        .modal-open {
+            overflow: hidden !important;
+        }
+    </style>
+
+    {# Mobile #}
+    {% include 'service/services_aujourd_hui_mobile.html.twig' %}
+    {% include 'service/services_avenir_mobile.html.twig' %}
+
+    {# Desktop #}
+    <div class="container-fluid d-none d-lg-table">
+        <div class="table-responsive table" id="dataTable" role="grid" aria-describedby="dataTable_info">
+            {% include 'service/services_aujourd_hui.html.twig' %}
+            <br/>
+            {% include 'service/services_a_venir.html.twig' %}
+        </div>
+    </div>
+{% include 'service/_modal_new.html.twig' %}
+{% include '_partials/_modal_edit.html.twig' %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'service/_script.html.twig' %}
+{% endblock %}

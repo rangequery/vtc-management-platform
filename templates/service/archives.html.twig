@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service{% endblock %}
+{# {% set pageTitle = 'Service' %} #}
+{% block body %}
+
+    <div class="container-fluid">
+{#        {% include '_partials/_title_header.html.twig' with {#}
+{#            title: 'Archives',#}
+{#            linkPath: path('app_service_new')#}
+{#        } %}#}
+    </div>
+    <style>
+
+        /* Style personnalisé pour donner des bordures aux "cellules" comme dans un tableau */
+        .bordered-row {
+            border: 1px solid #dee2e6; /* Bordure pour la ligne */
+        }
+
+        .bordered-col {
+            border: 1px solid #dee2e6; /* Bordure pour chaque colonne */
+            padding: 8px; /* Ajoute un peu de padding pour l'espacement */
+        }
+
+        /* Taille fixe pour les boutons */
+        .fixed-size-btn {
+            width: 100px; /* Largeur fixe */
+            height: 40px; /* Hauteur fixe */
+            text-align: center; /* Centrer le texte */
+            padding: 0; /* Évite que le padding interne ne modifie la taille du bouton */
+            white-space: nowrap; /* Évite que le texte se découpe sur plusieurs lignes */
+        }
+    </style>
+
+    {# Mobile #}
+{#    {% include 'service/services_aujourd_hui_mobile.html.twig' %}#}
+{#    {% include 'service/services_avenir_mobile.html.twig' %}#}
+    {#    {% include 'service/services_a_venir_excluant_ceux_d_aujourd_hui.html.twig' %} #}
+    {#    {% include 'service/services_passes.html.twig' %} #}
+    {# Desktop #}
+    <div class="container-fluid d-none d-lg-table">
+        <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+            <strong>Services passés</strong>
+            {% include 'service/services_passes.html.twig' %}
+        </div>
+    </div>
+    {% include 'service/_modal_new.html.twig' %}
+    {% include '_partials/_modal_edit.html.twig' %}
+
+{% endblock %}
+{% block javascripts %}
+    {% include 'service/_script.html.twig' %}
+{% endblock %}

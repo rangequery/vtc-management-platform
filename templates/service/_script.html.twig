@@ -1,0 +1,78 @@
+<script>
+
+    function confirmDelete() {
+        return confirm("Êtes-vous sûr de vouloir supprimer cet élément ?");
+    }
+
+    function setMontant(value) {
+        document.querySelector('#montantHt').value = value;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    })
+
+    // Open modal
+    function openModal(id) {
+        const url = id ? `/private/service/${id}/editModal` : '/new';
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('modal-edit').querySelector('.modal-content').innerHTML = data;
+                const modal = new bootstrap.Modal(document.getElementById('modal-edit'));
+                modal.show();
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectField = document.getElementById('{{ form.status.vars.id }}');
+        if (selectField) {
+            selectField.value = 1;  // La valeur que tu veux sélectionner
+            selectField.disabled = true;  // Désactive le champ select
+        }
+    });
+
+    // Validation du formulaire en JS
+    // On attache un écouteur d'événements au conteneur parent de la table
+    document.addEventListener('click', function (event) {
+        // On vérifie si l'élément cliqué est un bouton avec la classe 'confirm-action-btn'
+        if (event.target.classList.contains('confirm-action-btn')) {
+            // Prévenir le comportement par défaut
+            event.preventDefault();
+
+            // Récupérer le message de confirmation à partir de l'attribut data-message
+            const confirmationMessage = event.target.getAttribute('data-message');
+
+            // Confirmation de l'utilisateur avec le message de l'attribut
+            if (confirm(confirmationMessage)) {
+                const url = event.target.getAttribute('data-url'); // Récupérer l'URL du bouton cliqué
+
+                // Effectuer la requête GET en AJAX avec fetch()
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Si la requête réussit, rafraîchir la page
+                            window.location.reload();
+                        } else {
+                            // Gérer les erreurs HTTP (par exemple, 404, 500)
+                            alert('Une erreur s\'est produite lors de l\'envoi. Veuillez réessayer plus tard.');
+                        }
+                    })
+                    .catch(error => {
+                        // Gérer les erreurs réseau et les logs pour comprendre le crash
+                        console.error('Erreur réseau :', error);
+                        alert('Une erreur de connexion est survenue. Vérifiez votre connexion Internet et réessayez.');
+                    });
+            }
+        }
+    });
+</script>

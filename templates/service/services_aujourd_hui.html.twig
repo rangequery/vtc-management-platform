@@ -1,0 +1,112 @@
+<strong class="d-none d-lg-table">Services d'aujourd'hui en cours</strong>
+<table class="table table-striped my-0 table-bordered d-none d-lg-table overflow-hidden table-sm" id="dataTable">
+    <thead class="table-primary bordered-outer">
+    {% include 'service/_table_thead.html.twig' %}
+    </thead>
+    <tbody>
+
+    {# Section pour les services non terminés aujourd'hui #}
+    {% for service in services %}
+        {% if service.serviceAt|date('Y-m-d') == "now"|date('Y-m-d') and service.status.id != 4 and service.status.id != 9%}
+            <tr>
+                {% include 'service/_table_td.html.twig' %}
+
+                <td class="text-center">
+                    {% if service.chauffeur is empty %}
+                        {% if service.sousTraitent is defined and service.sousTraitent is empty %}
+                            <button class="btn btn-sm btn-warning confirm-action-btn" disabled>
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or  service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if service.chauffeur is defined and service.chauffeur is empty %}
+                            <button class="btn btn-sm btn-success confirm-action-btn" disabled
+                                    data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                    data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                Envoyer
+                            </button>
+                        {% else %}
+                            {% if service.status.id == 1 or  service.status.id == 6 %}
+                                <button class="btn btn-sm btn-success confirm-action-btn"
+                                        data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir envoyer cette course ?">
+                                    Envoyer
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-danger confirm-action-btn"
+                                        data-url="{{ path('app_home_annuler', { 'service_id' : service.id }) }}"
+                                        data-message="Êtes-vous sûr de vouloir annuler cette course ?">
+                                    Annuler
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                </td>
+                {% include 'service/_table_edit_button.html.twig' with {
+                    'show_route': 'app_service_show',
+                    'edit_route': 'app_service_edit',
+                    'del_route': 'app_service_remove',
+                    'id_name': 'id',
+                    'id_value': service.id
+                } %}
+            </tr>
+        {% endif %}
+    {% endfor %}
+{#    <tr style="background-color: transparent; border: transparent;">#}
+{#        <td colspan="14" class="p-2"> <!-- Retirer les padding avec p-0 -->#}
+{#            <hr style="border: none; height: 2px; background-color: #000; margin: 0;">#}
+{#        </td>#}
+{#    </tr>#}
+    </tbody>
+</table>
+<strong class="mt-4 d-none d-lg-table">Services terminés d'aujourd'hui</strong>
+{# Section pour les services terminés aujourd'hui #}
+    <table class="table table-striped my-0 table-bordered d-none d-lg-table overflow-hidden table-sm" id="dataTable">
+        <thead class="table-success bordered-outer">
+        {% include 'service/_table_thead.html.twig' %}
+        </thead>
+        <tbody>
+    {% for service in services %}
+        {% if service.serviceAt|date('Y-m-d') == "now"|date('Y-m-d') and service.status.id == 4 %}
+            <tr>
+                {% include 'service/_table_td.html.twig' %}
+                {# Section dynamique #}
+                <td class="text-center">
+                    {% if service.chauffeur is defined and service.chauffeur is empty %}
+                        N/A
+                    {% else %}
+                        <button class="btn btn-sm btn-danger confirm-action-btn" disabled
+                                data-url="{{ path('app_service_envoi', { 'idService' : service.id }) }}">
+                            Envoyer
+                        </button>
+                    {% endif %}
+                </td>
+                {% include 'service/_table_edit_button.html.twig' with {
+                    'show_route': 'app_service_show',
+                    'edit_route': 'app_service_edit',
+                    'del_route': 'app_service_remove',
+                    'id_name': 'id',
+                    'id_value': service.id
+                } %}
+
+            </tr>
+        {% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>

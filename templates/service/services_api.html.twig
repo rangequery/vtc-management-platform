@@ -1,0 +1,38 @@
+<table class="table table-striped my-0 table-bordered table-sm" id="pastServicesTable">
+    <thead class="table-info">
+    {% include 'service/_table_thead.html.twig' %}
+    </thead>
+    <tbody>
+    {# Section pour les services passés #}
+    {% for service in services %}
+
+            <tr>
+                {% include 'service/_table_td.html.twig' %}
+                {# Section dynamique #}
+                <td class="text-center">
+
+                    {% if service.chauffeur is defined and service.chauffeur is empty %}
+                        N/A
+                    {% else %}
+                        <button class="btn btn-sm btn-info confirm-action-btn"
+                                data-url="{{ path('app_service_archiver', { 'service_id' : service.id }) }}"
+                                data-message="Êtes-vous sûr de vouloir archiver cette course ?">
+                            Archiver
+                        </button>
+                    {% endif %}
+                </td>
+
+                    {% include 'service/_table_edit_button.html.twig' with {
+                        'show_route': 'app_service_show',
+                        'edit_route': 'app_service_edit',
+                        'del_route': 'app_service_remove',
+                        'id_name': 'id',
+                        'id_value': service.id
+                    } %}
+
+            </tr>
+
+    {% endfor %}
+    </tbody>
+</table>
+

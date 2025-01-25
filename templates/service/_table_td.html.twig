@@ -1,0 +1,35 @@
+<td>
+    {{ service.id }}
+</td>
+<td class="text-center">
+    <a href="#" class="btn btn-sm btn-warning">
+        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+           title="{{ service.informationComplementaire ?? '' }}"></i>
+    </a>
+</td>
+<td>{{ service.status.nom ?? 'N/A' }}</td>
+<td>{{ service.type.nom ?? 'N/A' }}</td>
+<td>
+
+    {{ service.referenceNumber ?? '' }}
+</td>
+<td>
+    📍 {{ service.pickUpFrom.nom  ?? '' }}<br/>
+    🎯 {{ service.pickUpTo.nom   ?? '' }}
+</td>
+<td class="text-center">{{ service.serviceAt ? service.serviceAt|date('d-m-Y - H:i') : '' }}</td>
+<td class="text-center">{{ service.pax ?? '' }}</td>
+<td class="text-center">{{ service.bagages ?? '' }}</td>
+<td>
+    {{ service.demandeur.nom ?? '' }}
+</td>
+<td> {{ service.montantHt ? service.montantHt ~ ' €' : '' }}</td>
+
+<td>
+    {% if service.chauffeur is empty %}
+        {{ service.sousTraitent.nom ?? 'ST N/A' }}
+    {% else %}
+        <a href="{{ path('app_service_chauffeur', {'slug' : service.chauffeur.slug }) }}">{{ service.chauffeur.nom ?? 'C N/A' }}</a>
+    {% endif %}
+
+</td>
